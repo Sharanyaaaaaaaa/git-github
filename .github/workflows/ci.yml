@@ -2,13 +2,21 @@ name: CI Pipeline              # Workflow name (shows in GitHub UI)
 
 on: [push, pull_request]      # When to run this workflow
 
-jobs:                          # Define jobs
-  job1:                       # Job ID
-    runs-on: ubuntu-latest     # Which runner to use
-    steps:                     # Steps to execute
-      - run: echo "Job 1"
-  job2:                       
-    runs-on: ubuntu-latest     
-    steps:                     
-      - run: echo "Job 2"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Building..."
+  
+  test:
+    needs: build          # Wait for build to complete
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Testing..."
+  
+  deploy:
+    needs: [build, test]  # Wait for both build and test
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Deploying..."
               
